@@ -1,6 +1,7 @@
 package com.binaryho.jwtsecurity.config;
 
 import com.binaryho.jwtsecurity.filter.AfterBasicAuthenticationFilter;
+import com.binaryho.jwtsecurity.filter.BeforeBasicAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.addFilterBefore(new BeforeBasicAuthenticationFilter(), BasicAuthenticationFilter.class);
         http.addFilterAfter(new AfterBasicAuthenticationFilter(), BasicAuthenticationFilter.class);
         http.csrf().disable();
 
