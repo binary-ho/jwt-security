@@ -3,9 +3,11 @@ package com.binaryho.jwtsecurity.config.auth;
 import com.binaryho.jwtsecurity.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Data
 public class PrincipalDetails implements UserDetails {
 
     private final User user;
