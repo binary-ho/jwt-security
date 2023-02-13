@@ -17,6 +17,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
         HttpServletResponse response) throws AuthenticationException {
         System.out.println("JwtAuthenticationFilter: 로그인 시도중");
+        /*
+        * 1. username, password 받아서
+        * 2. 정상인지 로그인 시도해본다. authenticationManager로 로그인 시도하면,
+        * 3. */
         return super.attemptAuthentication(request, response);
     }
 }
