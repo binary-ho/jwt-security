@@ -5,6 +5,8 @@ import com.binaryho.jwtsecurity.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +56,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             System.out.println(e.getMessage());
         }
         System.out.println("================================");
+//        return super.attemptAuthentication(request, response);
         return null;
+    }
+
+    /* attemptAuthentication 실행한 후 인증이 정상적으로 되었으면, 실행되는 메서드
+    *  JWT 토큰을 만들어서 request 요청한 사용자에게 JWT 토큰을 response 해주면 됨. */
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request,
+        HttpServletResponse response, FilterChain chain, Authentication authResult)
+        throws IOException, ServletException {
+        System.out.println("successfulAuthentication 실행됨 (인증이 완료됨) ");
+        super.successfulAuthentication(request, response, chain, authResult);
     }
 }
