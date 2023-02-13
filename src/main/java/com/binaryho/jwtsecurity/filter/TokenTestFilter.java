@@ -19,9 +19,6 @@ public class TokenTestFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        /*
-        * id, password가 정상적으로 들어와 로그인이 완료되면, 토큰을 만들어서 응답해준다.
-        * */
         if (httpServletRequest.getMethod().equals("POST")) {
             System.out.println("POST 요청됨");
             String headerAuth = httpServletRequest.getHeader("Authorization");
