@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class RestApiController {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("home")
     public String home() {
@@ -27,7 +28,7 @@ public class RestApiController {
 
     @PostMapping("join")
     public String join(@RequestBody User user) {
-        user.setPassword(user.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles("ROLE_USER");
         userRepository.save(user);
         return "회원가입완료";
