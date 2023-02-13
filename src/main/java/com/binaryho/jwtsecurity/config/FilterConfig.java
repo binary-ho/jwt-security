@@ -2,6 +2,7 @@ package com.binaryho.jwtsecurity.config;
 
 import com.binaryho.jwtsecurity.filter.Order0Filter;
 import com.binaryho.jwtsecurity.filter.Order1Filter;
+import com.binaryho.jwtsecurity.filter.TokenTestFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
