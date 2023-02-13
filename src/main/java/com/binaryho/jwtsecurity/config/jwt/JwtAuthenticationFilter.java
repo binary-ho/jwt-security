@@ -27,15 +27,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("JwtAuthenticationFilter: 로그인 시도중");
 
         try {
-//            BufferedReader bufferedReader = request.getReader();
-//            String input = null;
-//            while((input = bufferedReader.readLine()) != null) {
-//                System.out.println(input);
-//            }
-
             ObjectMapper objectMapper = new ObjectMapper();
-            InputStream inputStream = request.getInputStream();
-            User user = objectMapper.readValue(inputStream, User.class);
+            User user = objectMapper.readValue(request.getInputStream(), User.class);
             System.out.println(user);
 
             UsernamePasswordAuthenticationToken authenticationToken
