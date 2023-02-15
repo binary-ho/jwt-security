@@ -1,8 +1,10 @@
 package com.binaryho.jwtsecurity.config;
 
 import com.binaryho.jwtsecurity.config.jwt.JwtAuthenticationFilter;
+import com.binaryho.jwtsecurity.config.jwt.JwtAuthorizationFilter;
 import com.binaryho.jwtsecurity.filter.AfterBasicAuthenticationFilter;
 import com.binaryho.jwtsecurity.filter.TokenTestFilter;
+import com.binaryho.jwtsecurity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,7 @@ public class SecurityConfig {
 
     private final CorsFilter corsFilter;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,6 +40,7 @@ public class SecurityConfig {
             .formLogin().disable() /* 폼 로그인 안 쓸게요 */
             .httpBasic().disable() /* basic 방식이 아닌 bearer 방식을 쓰겠다 */
             .addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration)))
+            .addFilter(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), userRepository))
             .authorizeRequests()
             .antMatchers("/api/v1/user/**")
             .access("hasAnyRole('ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN')")
