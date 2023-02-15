@@ -32,24 +32,25 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
         throws IOException, ServletException {
-        super.doFilterInternal(request, response, chain);
+        /* 꼭 지워야 한다. 지우지 않으면 응답이 2번 들어가면서 오류가 날 수 있다 .*/
+//        super.doFilterInternal(request, response, chain);
         System.out.println("JwtAuthorizationFilter 거침.");
 
-        String jwtHeader = request.getHeader("Authorization");
+        String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
         System.out.println("jwtHeader: " + jwtHeader);
 
         /* JWT 토큰을 검증 해서 정상적인 사용자인지 확인
         * 1. header가 있는지 확인한다. */
-        if (jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
+        if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
             return;
         }
 
         /* 2. token 다듬고 username 꺼내기*/
-        String jwtToken = request.getHeader("Authorization")
-            .replace("Bearer ", "");
+        String jwtToken = request.getHeader(JwtProperties.HEADER_STRING)
+            .replace(JwtProperties.TOKEN_PREFIX, "");
 
-        String username = JWT.require(Algorithm.HMAC512("jinho"))
+        String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET))
             .build()
             .verify(jwtToken) /* 서명하기 */
             .getClaim("username")/* 유저 네임 거내기 */

@@ -1,5 +1,6 @@
 package com.binaryho.jwtsecurity.filter;
 
+import com.binaryho.jwtsecurity.config.jwt.JwtProperties;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.Filter;
@@ -21,10 +22,10 @@ public class TokenTestFilter implements Filter {
 
         if (httpServletRequest.getMethod().equals("POST")) {
             System.out.println("POST 요청됨");
-            String headerAuth = httpServletRequest.getHeader("Authorization");
+            String headerAuth = httpServletRequest.getHeader(JwtProperties.HEADER_STRING);
             System.out.println(headerAuth);
 
-            if (headerAuth.equals("jinho")) {
+            if (headerAuth.equals(JwtProperties.SECRET)) {
                 chain.doFilter(httpServletRequest, httpServletResponse);
             } else {
                 PrintWriter outPrintWriter = httpServletResponse.getWriter();

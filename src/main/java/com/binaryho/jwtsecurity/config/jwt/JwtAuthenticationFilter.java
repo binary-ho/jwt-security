@@ -67,13 +67,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String jwtToken = JWT.create()
             .withSubject(principalDetails.getUser().getUsername()) /* 토큰의 이름쯤 된다. */
-            .withExpiresAt(new Date(System.currentTimeMillis() + (60_000 * 10))) /* 만료 시간 10분 정도가 적절하다. */
+            .withExpiresAt(new Date(System.currentTimeMillis() + (JwtProperties.EXPIRATION_TIME))) /* 만료 시간 10분 정도가 적절하다. */
             .withClaim("id", principalDetails.getUser().getId())
             .withClaim("username", principalDetails.getUser().getUsername())
-            .sign(Algorithm.HMAC512("jinho")); /* RSA 방식 말고 HMAC로 간다 */
+            .sign(Algorithm.HMAC512(JwtProperties.SECRET)); /* RSA 방식 말고 HMAC로 간다 */
 
         /* 토큰을 헤더에 담아 보낸다. */
-        response.addHeader("Authorization", "Bearer " + jwtToken);
+        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
 //        super.successfulAuthentication(request, response, chain, authResult);
     }
 }
