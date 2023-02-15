@@ -1,10 +1,13 @@
 package com.binaryho.jwtsecurity.config.jwt;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.binaryho.jwtsecurity.config.auth.PrincipalDetails;
 import com.binaryho.jwtsecurity.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -57,9 +60,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     *  JWT 토큰을 만들어서 request 요청한 사용자에게 JWT 토큰을 response 해주면 됨. */
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
-        HttpServletResponse response, FilterChain chain, Authentication authResult)
-        throws IOException, ServletException {
+        HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         System.out.println("successfulAuthentication 실행됨 (인증이 완료됨) ");
-        super.successfulAuthentication(request, response, chain, authResult);
+
+        PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
+
+        String jwtToken = JWT.create()
+            .withSubject(principalDetails.getUser().getUsername()) /* 토큰의 이름쯤 된다. */
+            .withExpiresAt(new Date(System.currentTimeMillis() + (60_000 * 10))) /* 만료 시간 10분 정도가 적절하다. */
+            .withClaim("id", principalDetails.getUser().getId())
+            .withClaim("username", principalDetails.getUser().getUsername())
+            .sign(Algorithm.HMAC512("jinho")); /* RSA 방식 말고 HMAC로 간다 */
+
+        /* 토큰을 헤더에 담아 보낸다. */
+        response.addHeader("Authorization", "Bearer " + jwtToken);
+//        super.successfulAuthentication(request, response, chain, authResult);
     }
 }
