@@ -3,6 +3,7 @@ package com.binaryho.jwtsecurity.config;
 import com.binaryho.jwtsecurity.config.jwt.JwtAuthenticationFilter;
 import com.binaryho.jwtsecurity.config.jwt.JwtAuthorizationFilter;
 import com.binaryho.jwtsecurity.filter.AfterBasicAuthenticationFilter;
+import com.binaryho.jwtsecurity.filter.BeforeBasicAuthenticationFilter;
 import com.binaryho.jwtsecurity.filter.TokenTestFilter;
 import com.binaryho.jwtsecurity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.addFilterBefore(new BeforeBasicAuthenticationFilter(), BasicAuthenticationFilter.class);
-        http.addFilterBefore(new TokenTestFilter(), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new BeforeBasicAuthenticationFilter(), BasicAuthenticationFilter.class);
+//        http.addFilterBefore(new TokenTestFilter(), BasicAuthenticationFilter.class);
         http.addFilterAfter(new AfterBasicAuthenticationFilter(), BasicAuthenticationFilter.class);
         http.csrf().disable();
 
